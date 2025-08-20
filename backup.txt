@@ -1,0 +1,141 @@
+import 'package:flutter/material.dart';
+import 'package:carousel_slider/carousel_slider.dart';
+import '../widgets/AppDrawer.dart';
+
+class HomeScreen extends StatelessWidget {
+  const HomeScreen({super.key});
+
+  final List<String> sliderImages = const [
+    'assets/images/slider1.png',
+    'assets/images/slider2.png',
+    'assets/images/slider3.png',
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      drawer: const AppDrawer(),
+      appBar: AppBar(
+        title: const Text("PawConnect"),
+        backgroundColor: Colors.teal,
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            const SizedBox(height: 20),
+
+            // Carousel
+            CarouselSlider(
+              options: CarouselOptions(
+                height: 200.0,
+                autoPlay: true,
+                enlargeCenterPage: true,
+                autoPlayInterval: const Duration(seconds: 3),
+                viewportFraction: 0.9,
+              ),
+              items: sliderImages.map((imagePath) {
+                return Builder(
+                  builder: (BuildContext context) {
+                    return ClipRRect(
+                      borderRadius: BorderRadius.circular(16),
+                      child: Image.asset(
+                        imagePath,
+                        width: double.infinity,
+                        fit: BoxFit.fill,
+                      ),
+                    );
+                  },
+                );
+              }).toList(),
+            ),
+
+            const SizedBox(height: 20),
+            const Text(
+              'Welcome to PawConnect!',
+              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 10),
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16.0),
+              child: Text(
+                'Connecting people with rescued pets, support, and veterinary care.',
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 16),
+              ),
+            ),
+
+            const SizedBox(height: 30),
+
+            // Home Buttons
+            Wrap(
+              spacing: 12,
+              runSpacing: 12,
+              alignment: WrapAlignment.center,
+              children: [
+                HomeButton(
+                  icon: Icons.pets,
+                  label: 'View Pets',
+                  onTap: () => Navigator.pushNamed(context, '/view-pets'),
+                ),
+                HomeButton(
+                  icon: Icons.medical_services,
+                  label: 'Rescue',
+                  onTap: () => Navigator.pushNamed(context, '/rescue-request'),
+                ),
+                HomeButton(
+                  icon: Icons.photo_album,
+                  label: 'Gallery',
+                  onTap: () => Navigator.pushNamed(context, '/gallery'),
+                ),
+                HomeButton(
+                  icon: Icons.volunteer_activism,
+                  label: 'Donate',
+                  onTap: () => Navigator.pushNamed(context, '/donate'),
+                ),
+              ],
+            ),
+
+            const SizedBox(height: 30),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// Custom Home Button Widget
+class HomeButton extends StatelessWidget {
+  final IconData icon;
+  final String label;
+  final VoidCallback onTap;
+
+  const HomeButton({
+    super.key,
+    required this.icon,
+    required this.label,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: 160,
+      height: 55,
+      child: ElevatedButton.icon(
+        onPressed: onTap,
+        style: ElevatedButton.styleFrom(
+          backgroundColor: Colors.teal,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+          elevation: 3,
+        ),
+        icon: Icon(icon, size: 22, color: Colors.white),
+        label: Text(
+          label,
+          style: const TextStyle(fontSize: 16, color: Colors.white),
+        ),
+      ),
+    );
+  }
+}
